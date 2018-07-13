@@ -23,7 +23,7 @@ fiveRands = map fst $ take 5 $ tail' rands
 -- toLetter :: Integer -> Char
 
 randLetter :: Gen Char
-randLetter s = let (i, s') = rand s in (toLetter i, s')
+randLetter = generalA toLetter rand
 
 randString3 :: String
 randString3 = take 3 $ map (fst . randLetter . snd) rands
@@ -42,4 +42,5 @@ randTen :: Gen Integer -- the output of rand * 10
 randTen = generalA (* 10) rand
 
 generalA :: (a -> b) -> Gen a -> Gen b
-generalA f g s = let (a, s') = g s in (f a, s')
+generalA f g s = let (  a, s') = g s
+                 in  (f a, s')
