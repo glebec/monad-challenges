@@ -44,3 +44,23 @@ randTen = generalA (* 10) rand
 generalA :: (a -> b) -> Gen a -> Gen b
 generalA f g s = let (  a, s') = g s
                  in  (f a, s')
+
+-- 1.4
+
+randPair :: Gen (Char, Integer)
+randPair s = ((c, i), s'')
+    where (c, s')  = randLetter s
+          (i, s'') = rand s'
+
+generalPair :: Gen a -> Gen b -> Gen (a, b)
+generalPair ga gb s = ((a, b), s'')
+    where (a, s')  = ga s
+          (b, s'') = gb s'
+
+generalB :: (a -> b -> c) -> Gen a -> Gen b -> Gen c
+generalB f ga gb s = (f a b, s'')
+    where (a, s')  = ga s
+          (b, s'') = gb s'
+
+generalPair2 :: Gen a -> Gen b -> Gen (a, b)
+generalPair2 = generalB (,)
