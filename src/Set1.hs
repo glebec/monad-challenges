@@ -33,13 +33,13 @@ randString3 = take 3 $ map (fst . randLetter . snd) rands
 type Gen a = Seed -> (a, Seed)
 
 randEven :: Gen Integer -- the output of rand * 2
-randEven = generalA (* 2)
+randEven = generalA (* 2) rand
 
 randOdd :: Gen Integer -- the output of rand * 2 + 1
-randOdd = generalA ((+ 1) . (* 2))
+randOdd = generalA ((+ 1) . (* 2)) rand
 
 randTen :: Gen Integer -- the output of rand * 10
-randTen = generalA (* 10)
+randTen = generalA (* 10) rand
 
-generalA :: (Integer -> Integer) -> Gen Integer
-generalA f s = let (n, s') = rand s in (f n, s')
+generalA :: (a -> b) -> Gen a -> Gen b
+generalA f g s = let (a, s') = g s in (f a, s')
