@@ -64,3 +64,17 @@ generalB f ga gb s = (f a b, s'')
 
 generalPair2 :: Gen a -> Gen b -> Gen (a, b)
 generalPair2 = generalB (,)
+
+-- 1.5
+
+last' :: [a] -> a
+last' [x] = x
+last' (x:xs) = last' xs
+
+repRandom :: [Gen a] -> Gen [a]
+repRandom [] s = ([], s)
+repRandom l  s = (map fst ps, snd $ last' ps)
+  where ps = go l s
+        go []     s' = []
+        go (g:gs) s' = let p@(a, s'') = g s'
+                       in  p : go gs s''
