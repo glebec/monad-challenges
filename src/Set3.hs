@@ -37,3 +37,12 @@ allPairs2 = allCombs (,)
 
 allCards2 :: [Int] -> [String] -> [Card]
 allCards2 = allCombs Card
+
+-- 3.4
+
+allCombs3 :: (a -> b -> c -> d) -> [a] -> [b] -> [c] -> [d]
+allCombs3 _ [] _ _ = []
+allCombs3 _ _ [] _ = []
+allCombs3 _ _ _ [] = []
+allCombs3 f lx@(x:xs) ly lz = let fxys = map (f x) ly in
+    allCombs ($) fxys lz ++ allCombs3 f xs ly lz
