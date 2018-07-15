@@ -24,3 +24,16 @@ allCards :: [Int] -> [String] -> [Card]
 allCards [] _ = []
 allCards _ [] = []
 allCards (r:rs) suits = map (Card r) suits ++ allCards rs suits
+
+-- 3.3
+
+allCombs :: (a -> b -> c) -> [a] -> [b] -> [c]
+allCombs _ [] _ = []
+allCombs _ _ [] = []
+allCombs f (x:xs) l2 = map (f x) l2 ++ allCombs f xs l2
+
+allPairs2 :: [a] -> [b] -> [(a,b)]
+allPairs2 = allCombs (,)
+
+allCards2 :: [Int] -> [String] -> [Card]
+allCards2 = allCombs Card
