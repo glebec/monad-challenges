@@ -98,3 +98,37 @@ addSalaries2 ss n1 n2 = yLink (+) (lookupMay n1 ss) (lookupMay n2 ss)
 
 mkMaybe :: a -> Maybe a
 mkMaybe = Just
+
+-- 2.6
+
+tailProd :: Num a => [a] -> Maybe a
+tailProd xxs = tailMay xxs `link` (mkMaybe . product)
+
+tailSum :: Num a => [a] -> Maybe a
+tailSum xxs = tailMay xxs `link` (mkMaybe . sum)
+
+transMaybe :: (a -> b) -> Maybe a -> Maybe b
+transMaybe f ma = ma `link` (mkMaybe . f)
+
+tailProd2 :: Num a => [a] -> Maybe a
+tailProd2 = transMaybe product . tailMay
+
+tailSum2 :: Num a => [a] -> Maybe a
+tailSum2 = transMaybe sum . tailMay
+
+tailMax :: Ord a => [a] -> Maybe (Maybe a)
+tailMax = transMaybe maximumMay . tailMay
+
+tailMin :: Ord a => [a] -> Maybe (Maybe a)
+tailMin = transMaybe minimumMay . tailMay
+
+combine :: Maybe (Maybe a) -> Maybe a
+combine Nothing = Nothing
+combine (Just Nothing) = Nothing
+combine (Just (Just a)) = Just a
+
+tailMax2 :: Ord a => [a] -> Maybe a
+tailMax2 = combine . transMaybe maximumMay . tailMay
+
+tailMin2 :: Ord a => [a] -> Maybe a
+tailMin2 = combine . transMaybe minimumMay . tailMay
