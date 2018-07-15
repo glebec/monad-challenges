@@ -73,3 +73,28 @@ queryGreek2 g s = lookupMay s g
         `link` (\m ->
             headMay xs
             `link` \h -> fromIntegral m `divMay` fromIntegral h))
+
+-- 2.5
+-- salaries :: [(String, Integer)]
+
+addSalaries :: [(String, Integer)] -> String -> String -> Maybe Integer
+addSalaries ss n1 n2 = case (lookupMay n1 ss, lookupMay n2 ss) of
+    (Nothing, _      ) -> Nothing
+    (_,       Nothing) -> Nothing
+    (Just s1, Just s2) -> mkMaybe $ s1 + s2
+
+yLink :: (a -> b -> c) -> Maybe a -> Maybe b -> Maybe c
+yLink f ma mb =
+    ma `link` (\a ->
+        mb `link` (\b ->
+            mkMaybe $ f a b))
+-- yLink f ma mb = case (ma, mb) of
+--     (Nothing, _     ) -> Nothing
+--     (_,      Nothing) -> Nothing
+--     (Just a, Just b ) -> Just $ f a b
+
+addSalaries2 :: [(String, Integer)] -> String -> String -> Maybe Integer
+addSalaries2 ss n1 n2 = yLink (+) (lookupMay n1 ss) (lookupMay n2 ss)
+
+mkMaybe :: a -> Maybe a
+mkMaybe = Just
