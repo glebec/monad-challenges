@@ -17,6 +17,7 @@ library
                      , Set1
                      , Set2
                      , Set3
+                     , Set4
   -- other-modules:
   other-extensions:    Trustworthy, CPP, NoImplicitPrelude, BangPatterns
   build-depends:       base >= 4 && < 5
