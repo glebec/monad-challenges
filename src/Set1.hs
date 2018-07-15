@@ -78,3 +78,12 @@ repRandom l  s = (map fst ps, snd $ last' ps)
         go []     s' = []
         go (g:gs) s' = let p@(a, s'') = g s'
                        in  p : go gs s''
+
+-- 1.6
+
+genTwo :: Gen a -> (a -> Gen b) -> Gen b
+genTwo ga f s = let (a, s') = ga s
+                in  f a s'
+
+mkGen :: a -> Gen a
+mkGen a s = (a, s)
