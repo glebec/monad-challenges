@@ -41,3 +41,12 @@ repRandom2 (g:gs) =
         repRandom2 gs `genTwo` (\as ->
             mkGen $ a : as))
 -- well THAT was mind-bending, and I didn't use `generalA`, so now I'm worried.
+
+-- 4.3
+
+class Monad m where
+    bind :: m a -> (a -> m b) -> m b
+    return :: a -> m a
+
+linkM :: Monad m => (a -> b -> c) -> m a -> m b -> m c
+linkM f ma mb = ma `bind` (\a -> mb `bind` (return . f a))
