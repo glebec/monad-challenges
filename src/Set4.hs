@@ -144,3 +144,14 @@ randLetter = toLetter <$> Gen rand
 randString3 :: String
 -- randString3 = evalGen (sequence $ replicate 3 randLetter) seed1
 randString3 = evalGen (replicateM 3 randLetter) seed1
+
+-- 4.6.1.3
+
+randEven :: Gen Integer
+randEven = (*2) <$> Gen rand
+
+randOdd :: Gen Integer
+randOdd = (+1) <$> randEven
+
+randTen :: Gen Integer
+randTen = (*10) <$> Gen rand
