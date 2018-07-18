@@ -172,3 +172,11 @@ generalPair = liftM2 (,)
 
 repRandom :: [Gen a] -> Gen [a]
 repRandom = sequence
+
+-- 4.6.1.6
+
+genTwo :: Gen a -> (a -> Gen b) -> Gen b
+genTwo = bind
+
+mkGen :: a -> Gen a
+mkGen = return
