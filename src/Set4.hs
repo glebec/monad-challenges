@@ -167,3 +167,8 @@ randPair = liftM2 (,) randLetter randInteger
 -- generalPair :: Gen a -> Gen b -> Gen (a,b)
 generalPair :: Monad m => m a -> m b -> m (a,b)
 generalPair = liftM2 (,)
+
+-- 4.6.1.5
+
+repRandom :: [Gen a] -> Gen [a]
+repRandom = sequence
