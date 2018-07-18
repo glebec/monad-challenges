@@ -41,14 +41,12 @@ linkM f ma mb = ma `bind` (\a -> mb `bind` (return . f a))
 
 -- 4.4
 
-newtype Gen a = Gen (Seed -> (a, Seed))
+newtype Gen a = Gen { runGen :: Seed -> (a, Seed) }
 
 instance Monad Gen where
     return a = Gen (\s -> (a, s))
-    bind (Gen fa) fgb = Gen (\s ->
-        let (a, s') = fa s in
-        let (Gen fb) = fgb a in
-        fb s')
+    bind ga fgb = Gen (\s ->
+        let (a, s') = runGen ga s in runGen (fgb a) s')
 
 instance Monad Maybe where
     return = Just
