@@ -247,9 +247,14 @@ tailMin = join . fmapM minimumMay . tailMay
 -- 4.6.3.1
 
 allPairs :: [a] -> [b] -> [(a,b)]
-allPairs xs ys = xs >>= \x -> fmapM ((,) x) ys
+allPairs = liftM2 (,)
 
 -- 4.6.3.2
 
 allCards :: [Int] -> [String] -> [Card]
-allCards rs ss = rs >>= \r -> fmapM (Card r) ss
+allCards = liftM2 Card
+
+-- 4.6.3.3
+
+allCombs :: (a -> b -> c) -> [a] -> [b] -> [c]
+allCombs = liftM2
