@@ -263,3 +263,8 @@ allCombs = liftM2
 
 allCombs3 :: (a -> b -> c -> d) -> [a] -> [b] -> [c] -> [d]
 allCombs3 = liftM3
+
+-- 4.6.3.5
+
+combStep :: [a -> b] -> [a] -> [b]
+combStep = ap
