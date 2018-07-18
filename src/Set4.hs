@@ -75,6 +75,7 @@ sequence (m:ms) =
 
 -- generalB :: (a -> b -> c) -> Gen   a -> Gen   b -> Gen   c
 -- yLink    :: (a -> b -> c) -> Maybe a -> Maybe b -> Maybe c
+-- allCombs :: (a -> b -> c) -> [a]     -> [b]     -> [c]
 liftM2 :: Monad m => (a -> b -> c) -> m a -> m b -> m c
 liftM2 f ma mb = ma `bind` (\a -> mb `bind` (return . f a))
 
@@ -92,3 +93,24 @@ join = (`bind` id)
 -- can change type arguments, and are therefore a superclass of functors!
 fmapM :: Monad m => (a -> b) -> m a -> m b
 fmapM f ma = ma `bind` (return . f)
+
+-- 4.5.3
+
+-- adding this for convenience
+(>>=) :: Monad m => m a -> (a -> m b) -> m b
+(>>=) = bind
+
+-- allCombs3 :: (a -> b -> c -> d) -> [a] -> [b] -> [c] -> [d]
+liftM3 :: Monad m => (a -> b -> c -> d) -> m a -> m b -> m c -> m d
+liftM3 f ma mb mc =
+    ma >>= (\a ->
+    mb >>= (\b ->
+    mc >>= (\c ->
+    return $ f a b c)))
+
+-- combStep :: [a -> b] -> [a] -> [b]
+ap :: Monad m => m (a -> b) -> m a -> m b
+ap mf ma =
+    mf >>= (\f ->
+    ma >>= (\a ->
+    return $ f a))
