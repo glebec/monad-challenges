@@ -114,3 +114,15 @@ ap mf ma =
     mf >>= (\f ->
     ma >>= (\a ->
     return $ f a))
+
+-- 4.6
+
+-- 4.6.1
+
+-- 4.6.1.1
+
+seed1 :: Seed
+seed1 = mkSeed 1
+
+fiveRands :: [Integer]
+fiveRands = evalGen (sequence $ replicate 5 (Gen rand)) seed1
