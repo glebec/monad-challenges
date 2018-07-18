@@ -240,3 +240,10 @@ tailMax = join . fmapM maximumMay . tailMay
 
 tailMin :: Ord a => [a] -> Maybe a
 tailMin = join . fmapM minimumMay . tailMay
+
+-- 4.6.3
+
+-- 4.6.3.1
+
+allPairs :: [a] -> [b] -> [(a,b)]
+allPairs xs ys = xs >>= \x -> fmapM ((,) x) ys
