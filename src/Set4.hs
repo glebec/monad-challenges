@@ -43,6 +43,8 @@ import Set3 (Card(..))
 class Monad m where
     bind :: m a -> (a -> m b) -> m b
     return :: a -> m a
+    fail   :: String -> m a -- added for §5
+    fail = undefined -- added for §5
 
 linkM :: Monad m => (a -> b -> c) -> m a -> m b -> m c
 linkM f ma mb = ma `bind` (\a -> mb `bind` (return . f a))
