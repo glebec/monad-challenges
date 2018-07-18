@@ -87,3 +87,8 @@ liftM2 f ma mb = ma `bind` (\a -> mb `bind` (return . f a))
 -- combine :: Maybe (Maybe a) -> Maybe a
 join :: Monad m => m (m a) -> m a
 join = (`bind` id)
+
+-- Not part of the exercises, but the above gave me the epiphany that monads
+-- can change type arguments, and are therefore a superclass of functors!
+fmapM :: Monad m => (a -> b) -> m a -> m b
+fmapM f ma = ma `bind` (return . f)
