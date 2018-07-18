@@ -60,3 +60,19 @@ instance Monad [] where
 
 evalGen :: Gen a -> Seed -> a
 evalGen (Gen f) s = let (a, s') = f s in a
+
+-- 4.5
+
+-- 4.5.1
+
+-- repRandom :: [Gen a] -> Gen [a]
+sequence :: Monad m => [m a] -> m [a]
+sequence [] = return []
+sequence (m:ms) =
+    m `bind` (\a ->
+        sequence ms `bind` (\as ->
+            return $ a : as))
+
+-- generalB :: (a -> b -> c) -> Gen a -> Gen b -> Gen c
+liftM2 :: Monad m => (a -> b -> c) -> m a -> m b -> m c
+liftM2 f ma mb = ma `bind` (\a -> mb `bind` (return . f a))
