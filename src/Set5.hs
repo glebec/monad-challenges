@@ -12,6 +12,7 @@ import Set2 ( Maybe(..)
             , divMay
             , maximumMay
             , minimumMay)
+import Set3 ( Card(..))
 import Set4 ( Monad(..)
             , (>>=)
             , Gen(..)
@@ -92,3 +93,24 @@ tailMax :: Ord a => [a] -> Maybe a
 tailMax xs = do
     t <- tailMay xs
     maximumMay t
+
+-- 5.5
+
+allPairs :: [a] -> [b] -> [(a,b)]
+allPairs xs ys = do
+    x <- xs
+    y <- ys
+    return (x, y)
+
+allCards :: [Int] -> [String] -> [Card]
+allCards rs ss = do
+    r <- rs
+    s <- ss
+    return $ Card r s
+
+allCombs3 :: (a -> b -> c -> d) -> [a] -> [b] -> [c] -> [d]
+allCombs3 f xs ys zs = do
+    x <- xs
+    y <- ys
+    z <- zs
+    return $ f x y z
