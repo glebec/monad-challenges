@@ -126,3 +126,11 @@ seed1 = mkSeed 1
 
 fiveRands :: [Integer]
 fiveRands = evalGen (sequence $ replicate 5 (Gen rand)) seed1
+
+-- 4.6.1.2
+
+randLetter :: Gen Char
+randLetter = Gen rand >>= (return . toLetter)
+
+randString3 :: String
+randString3 = evalGen (sequence $ replicate 3 (randLetter)) seed1
