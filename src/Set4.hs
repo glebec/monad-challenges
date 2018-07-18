@@ -137,9 +137,12 @@ fiveRands = evalGen (replicateM 5 (Gen rand)) seed1
 
 -- 4.6.1.2
 
+randInteger :: Gen Integer
+randInteger = Gen rand
+
 randLetter :: Gen Char
 -- randLetter = Gen rand >>= (return . toLetter)
-randLetter = toLetter <$> Gen rand
+randLetter = toLetter <$> randInteger
 
 randString3 :: String
 -- randString3 = evalGen (sequence $ replicate 3 randLetter) seed1
@@ -148,10 +151,19 @@ randString3 = evalGen (replicateM 3 randLetter) seed1
 -- 4.6.1.3
 
 randEven :: Gen Integer
-randEven = (*2) <$> Gen rand
+randEven = (*2) <$> randInteger
 
 randOdd :: Gen Integer
 randOdd = (+1) <$> randEven
 
 randTen :: Gen Integer
-randTen = (*10) <$> Gen rand
+randTen = (*10) <$> randInteger
+
+-- 4.6.1.4
+
+randPair :: Gen (Char, Integer)
+randPair = liftM2 (,) randLetter randInteger
+
+-- generalPair :: Gen a -> Gen b -> Gen (a,b)
+generalPair :: Monad m => m a -> m b -> m (a,b)
+generalPair = liftM2 (,)
