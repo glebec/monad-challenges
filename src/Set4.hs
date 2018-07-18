@@ -4,7 +4,14 @@
 module Set4 where
 
 import MCPrelude
-import Set2 (Maybe(..), link)
+import Set2 ( Maybe(..)
+            , link
+            , headMay
+            , tailMay
+            , lookupMay
+            , divMay
+            , maximumMay
+            , minimumMay)
 
 -- 4.1
 
@@ -180,3 +187,26 @@ genTwo = bind
 
 mkGen :: a -> Gen a
 mkGen = return
+
+-- 4.6.2
+
+-- 4.6.2.1 (imported)
+
+-- 4.6.2.2 (imported)
+
+-- headMay :: [a] -> Maybe a
+-- tailMay :: [a] -> Maybe [a]
+-- lookupMay :: Eq a => a -> [(a, b)] -> Maybe b
+-- divMay :: (Eq a, Fractional a) => a -> a -> Maybe a
+-- maximumMay :: Ord a => [a] -> Maybe a
+-- minimumMay :: Ord a => [a] -> Maybe a
+
+-- 4.6.2.3
+
+queryGreek :: GreekData -> String -> Maybe Double
+queryGreek gs s =
+    lookupMay s gs >>= \xs ->
+    tailMay xs     >>= \t  ->
+    maximumMay t   >>= \m  ->
+    headMay xs     >>= \h  ->
+    fromIntegral m `divMay` fromIntegral h
