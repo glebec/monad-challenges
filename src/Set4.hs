@@ -210,3 +210,33 @@ queryGreek gs s =
     maximumMay t   >>= \m  ->
     headMay xs     >>= \h  ->
     fromIntegral m `divMay` fromIntegral h
+
+-- 4.6.2.4
+
+-- `chain` as (=<<) already implemented in 4.5.2
+-- `link` as (>>=) already implemented in 4.3–4.4
+
+-- 4.6.2.5
+
+addSalaries :: [(String, Integer)] -> String -> String -> Maybe Integer
+addSalaries ts n1 n2 = linkM (+) (lookupMay n1 ts) (lookupMay n2 ts)
+
+mkMaybe :: a -> Maybe a
+mkMaybe = return
+
+-- 4.6.2.6
+
+transMaybe :: (a -> b) -> Maybe a -> Maybe b
+transMaybe = fmapM
+
+tailProd :: Num a => [a] -> Maybe a
+tailProd = fmapM product . tailMay
+
+tailSum :: Num a => [a] -> Maybe a
+tailSum = fmapM sum . tailMay
+
+tailMax :: Ord a => [a] -> Maybe a
+tailMax = join . fmapM maximumMay . tailMay
+
+tailMin :: Ord a => [a] -> Maybe a
+tailMin = join . fmapM minimumMay . tailMay
