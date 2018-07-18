@@ -87,3 +87,19 @@ genTwo ga f s = let (a, s') = ga s
 
 mkGen :: a -> Gen a
 mkGen a s = (a, s)
+
+-- 4.2
+
+generalB2 :: (a -> b -> c) -> Gen a -> Gen b -> Gen c
+generalB2 f ga gb = ga `genTwo` (\a -> gb `genTwo` (mkGen . f a))
+
+-- mkGen :: a -> Gen a
+-- genTwo :: Gen a -> (a -> Gen b) -> Gen b
+-- generalA :: (a -> b) -> Gen a -> Gen b
+repRandom2 :: [Gen a] -> Gen [a]
+repRandom2 [] = mkGen []
+repRandom2 (g:gs) =
+    g `genTwo` (\a ->
+        repRandom2 gs `genTwo` (\as ->
+            mkGen $ a : as))
+-- well THAT was mind-bending, and I didn't use `generalA`, so now I'm worried.

@@ -4,7 +4,7 @@
 module Set4 where
 
 import MCPrelude
-import Set1 (Gen, generalA, mkGen, genTwo)
+import Set2 (Maybe(..), link)
 
 -- 4.1
 
@@ -28,19 +28,7 @@ import Set1 (Gen, generalA, mkGen, genTwo)
 
 -- 4.2
 
-generalB2 :: (a -> b -> c) -> Gen a -> Gen b -> Gen c
-generalB2 f ga gb = ga `genTwo` (\a -> gb `genTwo` (mkGen . f a))
-
--- mkGen :: a -> Gen a
--- genTwo :: Gen a -> (a -> Gen b) -> Gen b
--- generalA :: (a -> b) -> Gen a -> Gen b
-repRandom2 :: [Gen a] -> Gen [a]
-repRandom2 [] = mkGen []
-repRandom2 (g:gs) =
-    g `genTwo` (\a ->
-        repRandom2 gs `genTwo` (\as ->
-            mkGen $ a : as))
--- well THAT was mind-bending, and I didn't use `generalA`, so now I'm worried.
+-- moved to Set1 because of `Gen` newtype incompatibility
 
 -- 4.3
 
@@ -50,3 +38,27 @@ class Monad m where
 
 linkM :: Monad m => (a -> b -> c) -> m a -> m b -> m c
 linkM f ma mb = ma `bind` (\a -> mb `bind` (return . f a))
+
+-- 4.4
+
+newtype Gen a = Gen (Seed -> (a, Seed))
+
+instance Monad Gen where
+    return a = Gen (\s -> (a, s))
+    bind (Gen fa) fgb = Gen (\s ->
+        let (a, s') = fa s in
+        let (Gen fb) = fgb a in
+        fb s')
+
+instance Monad Maybe where
+    return = Just
+    bind = link
+
+instance Monad [] where
+    return = (:[])
+    bind lx fx2l = case lx of
+        [] -> []
+        (x:xs) -> fx2l x ++ bind xs fx2l
+
+evalGen :: Gen a -> Seed -> a
+evalGen (Gen f) s = let (a, s') = f s in a
