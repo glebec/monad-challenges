@@ -73,6 +73,17 @@ sequence (m:ms) =
         sequence ms `bind` (\as ->
             return $ a : as))
 
--- generalB :: (a -> b -> c) -> Gen a -> Gen b -> Gen c
+-- generalB :: (a -> b -> c) -> Gen   a -> Gen   b -> Gen   c
+-- yLink    :: (a -> b -> c) -> Maybe a -> Maybe b -> Maybe c
 liftM2 :: Monad m => (a -> b -> c) -> m a -> m b -> m c
 liftM2 f ma mb = ma `bind` (\a -> mb `bind` (return . f a))
+
+-- 4.5.2
+
+-- chain :: (a -> Maybe b) -> Maybe a -> Maybe b
+(=<<) :: Monad m => (a -> m b) -> m a -> m b
+(=<<) = flip bind
+
+-- combine :: Maybe (Maybe a) -> Maybe a
+join :: Monad m => m (m a) -> m a
+join = (`bind` id)
