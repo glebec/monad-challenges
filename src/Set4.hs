@@ -94,6 +94,10 @@ join = (`bind` id)
 fmapM :: Monad m => (a -> b) -> m a -> m b
 fmapM f ma = ma `bind` (return . f)
 
+-- actually this ends up being useful later, so here's an operator for it
+(<$>) :: Monad m => (a -> b) -> m a -> m b
+(<$>) = fmapM
+
 -- 4.5.3
 
 -- adding this for convenience
@@ -124,13 +128,19 @@ ap mf ma =
 seed1 :: Seed
 seed1 = mkSeed 1
 
+replicateM :: Monad m => Int -> m a -> m [a]
+replicateM n ma = sequence $ replicate n ma
+
 fiveRands :: [Integer]
-fiveRands = evalGen (sequence $ replicate 5 (Gen rand)) seed1
+-- fiveRands = evalGen (sequence $ replicate 5 (Gen rand)) seed1
+fiveRands = evalGen (replicateM 5 (Gen rand)) seed1
 
 -- 4.6.1.2
 
 randLetter :: Gen Char
-randLetter = Gen rand >>= (return . toLetter)
+-- randLetter = Gen rand >>= (return . toLetter)
+randLetter = toLetter <$> Gen rand
 
 randString3 :: String
-randString3 = evalGen (sequence $ replicate 3 (randLetter)) seed1
+-- randString3 = evalGen (sequence $ replicate 3 randLetter) seed1
+randString3 = evalGen (replicateM 3 randLetter) seed1
