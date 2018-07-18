@@ -258,3 +258,8 @@ allCards = liftM2 Card
 
 allCombs :: (a -> b -> c) -> [a] -> [b] -> [c]
 allCombs = liftM2
+
+-- 4.6.3.4
+
+allCombs3 :: (a -> b -> c -> d) -> [a] -> [b] -> [c] -> [d]
+allCombs3 = liftM3
