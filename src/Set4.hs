@@ -12,6 +12,7 @@ import Set2 ( Maybe(..)
             , divMay
             , maximumMay
             , minimumMay)
+import Set3 (Card(..))
 
 -- 4.1
 
@@ -247,3 +248,8 @@ tailMin = join . fmapM minimumMay . tailMay
 
 allPairs :: [a] -> [b] -> [(a,b)]
 allPairs xs ys = xs >>= \x -> fmapM ((,) x) ys
+
+-- 4.6.3.2
+
+allCards :: [Int] -> [String] -> [Card]
+allCards rs ss = rs >>= \r -> fmapM (Card r) ss
