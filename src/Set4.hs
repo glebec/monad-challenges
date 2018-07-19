@@ -69,7 +69,7 @@ instance Monad [] where
         (x:xs) -> fx2l x ++ bind xs fx2l
 
 evalGen :: Gen a -> Seed -> a
-evalGen (Gen f) s = let (a, s') = f s in a
+evalGen ga s = fst $ runGen ga s
 
 -- 4.5
 
@@ -124,10 +124,11 @@ liftM3 f ma mb mc =
 
 -- combStep :: [a -> b] -> [a] -> [b]
 ap :: Monad m => m (a -> b) -> m a -> m b
-ap mf ma =
-    mf >>= (\f ->
-    ma >>= (\a ->
-    return $ f a))
+ap = liftM2 ($)
+-- ap mf ma =
+--     mf >>= (\f ->
+--     ma >>= (\a ->
+--     return $ f a))
 
 -- 4.6
 

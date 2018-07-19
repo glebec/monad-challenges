@@ -18,11 +18,11 @@ instance Show a => Show (Maybe a) where
 
 headMay :: [a] -> Maybe a
 headMay [] = Nothing
-headMay (x:xs) = Just x
+headMay (x:_) = Just x
 
 tailMay :: [a] -> Maybe [a]
 tailMay [] = Nothing
-tailMay (x:xs) = Just xs
+tailMay (_:xs) = Just xs
 
 lookupMay :: Eq a => a -> [(a, b)] -> Maybe b
 lookupMay _ [] = Nothing
@@ -47,14 +47,14 @@ minimumMay xs = Just $ foldr1 min xs
 
 queryGreek :: GreekData -> String -> Maybe Double
 queryGreek g s = case lookupMay s g of
-    Nothing   -> Nothing
-    (Just xs) -> case tailMay xs of
-        Nothing  -> Nothing
-        (Just t) -> case maximumMay t of
-            Nothing  -> Nothing
-            (Just m) -> case headMay xs of
-                Nothing  -> Nothing
-                (Just h) -> fromIntegral m `divMay` fromIntegral h
+    Nothing -> Nothing
+    Just xs -> case tailMay xs of
+        Nothing -> Nothing
+        Just t  -> case maximumMay t of
+            Nothing -> Nothing
+            Just m  -> case headMay xs of
+                Nothing -> Nothing
+                Just h  -> fromIntegral m `divMay` fromIntegral h
 
 -- 2.4
 

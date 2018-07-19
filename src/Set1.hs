@@ -36,7 +36,7 @@ randEven :: Gen Integer -- the output of rand * 2
 randEven = generalA (* 2) rand
 
 randOdd :: Gen Integer -- the output of rand * 2 + 1
-randOdd = generalA ((+ 1) . (* 2)) rand
+randOdd = generalA (+ 1) randEven
 
 randTen :: Gen Integer -- the output of rand * 10
 randTen = generalA (* 10) rand
@@ -86,7 +86,7 @@ genTwo ga f s = let (a, s') = ga s
                 in  f a s'
 
 mkGen :: a -> Gen a
-mkGen a s = (a, s)
+mkGen = (,)
 
 -- 4.2
 
